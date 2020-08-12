@@ -1,4 +1,5 @@
 /* TODO: CHANGE FONT SIZE ON QUERIES */
+/* TODO: CHANGE FONT FAMILIES */
 
 @font-face {
   font-family: heb;
@@ -16,6 +17,9 @@ body {
   background-color: #f1f1f1;
   margin: 0;
   box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 a {
   text-decoration: none;
@@ -143,6 +147,7 @@ img {
   width: 100%;
 }
 .meme-container {
+  padding: 20px 50px;
   display: flex;
 }
 /* Author */
@@ -166,6 +171,7 @@ img {
 /* Footer */
 footer {
   height: 205px;
+  margin-top: auto;
   display: flex;
   color: #ffff;
   background-color: #ff7f00;

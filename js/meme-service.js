@@ -33,7 +33,6 @@ function updateSelectedMeme(imgId) {
   let foundImg = findImg(imgId);
 
   gMeme.selectedImgId = foundImg.id;
-  console.log('', gMeme);
 }
 function changeMemeTxt(val) {
   gMeme.lines[gMeme.selectedLineIdx].txt = val;
@@ -61,6 +60,25 @@ function switchLine(isDeleted = false) {
 
 function changeFontSize(fontSize) {
   gMeme.lines[gMeme.selectedLineIdx].size = fontSize;
+}
+// TODO: figure this shit out
+function resetTxt() {
+  gMeme = {
+    selectedImgId: gMeme.selectedImgId,
+    selectedLineIdx: 0,
+    lines: [
+      {
+        txt: 'reste',
+        size: 55,
+        align: 'left',
+        color: 'red',
+        y: 0,
+        x: 0,
+        selected: true,
+      },
+    ],
+  };
+  console.log('', gMeme);
 }
 
 function addLine() {

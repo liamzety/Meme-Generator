@@ -11,6 +11,11 @@ function init() {
   renderGallery();
   EL_CANVAS = document.querySelector('.meme-canvas');
   CTX = EL_CANVAS.getContext('2d');
+
+  gTxtFontSize = gMeme.lines[0].size;
+  gMeme.lines[gMeme.selectedLineIdx].x = EL_CANVAS.width;
+  gMeme.lines[gMeme.selectedLineIdx].y =
+    EL_CANVAS.height - EL_CANVAS.height + gTxtFontSize;
 }
 
 function renderGallery() {
@@ -19,24 +24,18 @@ function renderGallery() {
 
   for (let i = 0; i < gImgs.length; i++) {
     strHTML += `
-    <img onclick="renderEditor(this, ${gImgs[i].id})" src="${gImgs[i].url}" />
+    <img onclick="renderEditor( ${gImgs[i].id})" src="${gImgs[i].url}" />
     `;
   }
 
   elGallery.innerHTML = strHTML;
 }
 
-function renderEditor(elImg, imgId) {
+function renderEditor(imgId) {
   updateSelectedMeme(imgId);
   let currentMeme = getgMeme();
 
   handleRenders();
-
-  gTxtFontSize = gMeme.lines[0].size;
-  gMeme.lines[gMeme.selectedLineIdx].x = EL_CANVAS.width;
-  gMeme.lines[gMeme.selectedLineIdx].y =
-    EL_CANVAS.height - EL_CANVAS.height + gTxtFontSize;
-
   renderMemeCanvas(imgId, currentMeme);
 }
 
@@ -120,29 +119,29 @@ function onSaveImg() {
 function onMoveTxt(ev) {
   let meme = getgMeme();
   let currentMemeId = meme.selectedImgId;
-  let currentMemeIdx = meme.selectedLineIdx;
+
   switch (ev.key) {
     case 'ArrowRight':
       ev.preventDefault();
       gMeme.lines[gMeme.selectedLineIdx].x += 10;
 
-      renderMemeCanvas(currentMemeId, meme, false, currentMemeIdx);
+      renderMemeCanvas(currentMemeId, meme, false);
       break;
     case 'ArrowLeft':
       ev.preventDefault();
       gMeme.lines[gMeme.selectedLineIdx].x -= 10;
 
-      renderMemeCanvas(currentMemeId, meme, false, currentMemeIdx);
+      renderMemeCanvas(currentMemeId, meme, false);
       break;
     case 'ArrowUp':
       ev.preventDefault();
       gMeme.lines[gMeme.selectedLineIdx].y -= 10;
-      renderMemeCanvas(currentMemeId, meme, false, currentMemeIdx);
+      renderMemeCanvas(currentMemeId, meme, false);
       break;
     case 'ArrowDown':
       ev.preventDefault();
       gMeme.lines[gMeme.selectedLineIdx].y += 10;
-      renderMemeCanvas(currentMemeId, meme, false, currentMemeIdx);
+      renderMemeCanvas(currentMemeId, meme, false);
       break;
 
     default:
@@ -150,7 +149,7 @@ function onMoveTxt(ev) {
   }
 }
 
-function renderMemeCanvas(imgId, meme, isSaved, currentMemeIdx = 0) {
+function renderMemeCanvas(imgId, meme, isSaved) {
   let foundImg = findImg(imgId);
   let img = new Image();
   img.src = foundImg.url;
@@ -183,16 +182,17 @@ function renderMemeCanvas(imgId, meme, isSaved, currentMemeIdx = 0) {
       gMeme.lines[i].y,
       gMeme.lines[i].x
     );
-
-    //  gMeme.lines[gMeme.selectedLineIdx].y
-    console.log('', gMeme.lines[i].x);
   }
 }
 
 function handleRenders() {
   const elMemeContainer = document.querySelector('.meme-container');
   const elGallery = document.querySelector('.meme-gallery');
+  const elGalleryNav = document.querySelector('.navbar');
+  const elGalleryAuthor = document.querySelector('.author');
 
   elMemeContainer.classList.toggle('hidden');
   elGallery.classList.toggle('hidden');
+  elGalleryNav.classList.toggle('hidden');
+  elGalleryAuthor.classList.toggle('hidden');
 }
