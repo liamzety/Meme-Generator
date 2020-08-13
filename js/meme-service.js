@@ -5,7 +5,7 @@ let gMeme = {
   selectedLineIdx: 0,
   lines: [
     {
-      txt: 'I never eat Falafel',
+      txt: 'Puki Mafioso',
       size: 55,
       align: 'left',
       color: 'red',
@@ -55,7 +55,7 @@ function resetTxt() {
     selectedLineIdx: 0,
     lines: [
       {
-        txt: 'reste',
+        txt: 'reset',
         size: 55,
         align: 'left',
         color: 'red',
@@ -70,7 +70,7 @@ function resetTxt() {
 
 function addLine() {
   gMeme.lines.push({
-    txt: 'I never eat Falafel',
+    txt: 'The struggle is real..',
     size: 55,
     align: 'left',
     color: 'red',

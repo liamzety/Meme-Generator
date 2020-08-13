@@ -46,6 +46,7 @@ a {
   font-size: 1rem;
   color: #ffff;
 }
+
 img {
   width: 100%;
   object-fit: cover;
@@ -430,6 +431,7 @@ img {
   padding: 6px 6px 2px;
   background-color: #ff7f00;
 }
+
 .footer-icons img {
   width: 23px;
   filter: invert(100%) sepia(90%) saturate(0%) hue-rotate(62deg)
@@ -439,7 +441,7 @@ img {
   filter: brightness(50%);
 }
 .footer-icons .icon-wrapper:not(:last-child) {
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 
 /* Footer */
@@ -475,6 +477,7 @@ footer {
   color: #040a2c;
 }
 .controls-btn {
+  cursor: pointer;
   background-color: #ff7f00;
   border-radius: 16px;
   font-size: 25px;
@@ -484,7 +487,10 @@ footer {
   justify-content: center;
   align-items: center;
 }
-
+.controls-btn:hover {
+  filter: brightness(50%);
+  transition: all 1s ease;
+}
 /* Animations */
 @keyframes slide-in-top {
   0% {
