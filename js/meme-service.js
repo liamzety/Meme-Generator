@@ -23,7 +23,7 @@ function createGalleryImgs() {
   for (let i = 0; i < 18; i++) {
     gImgs.push({
       id: i,
-      url: `imgs/${i + 1}.jpg`,
+      url: `./imgs/${i + 1}.jpg`,
       keywords: ['happy'],
     });
   }
