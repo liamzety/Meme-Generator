@@ -1,7 +1,4 @@
 'use strict';
-const gKeywords = { happy: 12, 'funny puk': 1 };
-
-const gImgs = [];
 
 let gMeme = {
   selectedImgId: 1,
@@ -19,16 +16,6 @@ let gMeme = {
   ],
 };
 
-function createGalleryImgs() {
-  for (let i = 0; i < 18; i++) {
-    gImgs.push({
-      id: i,
-      url: `./imgs/${i + 1}.jpg`,
-      keywords: ['happy'],
-    });
-  }
-}
-
 function updateSelectedMeme(imgId) {
   let foundImg = findImg(imgId);
 
@@ -45,10 +32,10 @@ function switchLine(isDeleted = false) {
     } else {
       gMeme.selectedLineIdx++;
     }
-  } else {
+  } else if (gMeme.selectedLineIdx !== 0) {
     gMeme.selectedLineIdx--;
   }
-
+  console.log('', gMeme.selectedLineIdx);
   gMeme.lines.forEach((meme, idx) => {
     if (idx === gMeme.selectedLineIdx) {
       meme.selected = true;
@@ -94,7 +81,7 @@ function addLine() {
 }
 
 function deleteLine() {
-  if (gMeme.selectedLineIdx === 0) return;
+  //if (gMeme.selectedLineIdx === 0) return;
   gMeme.lines = gMeme.lines.filter((meme) => {
     return !meme.selected;
   });
