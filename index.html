@@ -12,7 +12,9 @@
     ></script>
     <link rel="stylesheet" href="css/main.css" />
   </head>
-  <body onkeydown="onMoveTxt(event)" onload="init()">
+  <body onmousedown="closeAllModals(event)" onkeydown="onMoveTxt(event)" onload="init()">
+
+    <!-- Filter -->
     <header>
       <div class="filter">
         <div class="logo-img-container">
@@ -22,8 +24,11 @@
         <div class="filter-links">
           <a class="active-page" onclick="backToGallery()" href="#">Gallery</a>
           <div class="vl"></div>
-          <a href="#about" onclick="backToAbout()">About</a>
+          <a href="#about" onclick="backToGallery()">About</a>
+          <div class="vl"></div>
+          <a onclick="backToMyMemes()">My Memes</a>
         </div>
+        <!-- Hamburger -->
         <div class="hamburger-menu" hidden>
           <label
             onclick="changeHamburgerIcon()"
@@ -38,11 +43,13 @@
             >
             <div class="vl"></div>
             <a href="#about" onclick="backToAbout()">About</a>
+            <div class="vl"></div>
+            <a onclick="backToMyMemes()">My Memes</a>
           </div>
         </div>
       </div>
     </header>
-
+  <!-- Navbar -->
     <nav>
       <div class="navbar">
         <input
@@ -51,16 +58,23 @@
           placeholder="Enter search keyword"
         />
 
-        <div class="tags"></div>
+        <div class="tags">
+          <!-- TAGS RENDER -->
+        </div>
       </div>
     </nav>
 
+    <!-- Gallery -->
     <div class="gallery-bg">
       <section class="meme-gallery grid-container">
         <!-- GALLERY RENDER -->
-      </section>
+      </section>   
     </div>
-
+    <!-- Saved Memes -->
+    <section class="saved-memes-container hidden" >
+      <!-- SAVED MEMES RENDER -->
+    </section>
+    <!-- Canvas -->
     <section class="meme-container hidden">
       <div class="meme-control">
         <canvas
@@ -74,10 +88,41 @@
         </canvas>
       </div>
 
-      <section class="meme-editor">
-        <p>
-          Usage: Use the arrow keys or click the mouse to move the current text.
+      <div class="meme-editor">
+        <p class="instructions">
+          Usage: to move the current text Use either the
+          <span>Arrow Keys</span> on your keyboard or
+          <span>Arrow Buttons</span> or by <span>Clicking the Mouse</span>.
         </p>
+        <div
+          onmousedown="onMoveTxt(event)"
+          ontouchstart="onMoveTxt(event)"
+          class="controls-arrow-up controls-btn"
+        >
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <div
+          onmousedown="onMoveTxt(event)"
+          ontouchstart="onMoveTxt(event)"
+          class="controls-arrow-left controls-btn"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </div>
+        <div
+          onmousedown="onMoveTxt(event)"
+          ontouchstart="onMoveTxt(event)"
+          class="controls-arrow-down controls-btn"
+        >
+          <i class="fas fa-arrow-down"></i>
+        </div>
+        <div
+          onmousedown="onMoveTxt(event)"
+          ontouchstart="onMoveTxt(event)"
+          class="controls-arrow-right controls-btn"
+        >
+          <i class="fas fa-arrow-right"></i>
+        </div>
+
         <input
           class="meme-text"
           oninput="onChangeMemeTxt(this)"
@@ -100,34 +145,43 @@
           class="font-sizer"
           oninput="onChangeMemeFont(this)"
           type="number"
-          onfocus="this.value=''"
           placeholder="Size"
         />
 
-        <div class="btn-align-left controls-btn">
-          <i class="fas fa-align-left"></i>
-        </div>
-        <div class="btn-align-center controls-btn">
-          <i class="fas fa-align-center"></i>
-        </div>
-        <div class="btn-align-right controls-btn">
-          <i class="fas fa-align-right"></i>
-        </div>
-        <div class="btn-brush controls-btn">
-          <i class="fas fa-palette"></i>
-        </div>
-        <select name="" class="btn-select">
-          <option value="">Impact</option>
+    
+
+        <label for="palette-txt" class="btn-brush-txt controls-btn">
+        <i class="fas fa-palette" ><input oninput="onChangeColor()" type="color" id="palette-txt" style="visibility: hidden; width: 0; height: 0;"></input> </i>  
+        </label>
+
+        <label for="palette-border" class="btn-brush-border controls-btn">
+        <i class="fas fa-bold" ><input oninput="onChangeBorderColor()" type="color" id="palette-border" style="visibility: hidden; width: 0; height: 0;"></input> </i>  
+      </label>
+
+        <select oninput="onChangeFontFam(this.value)"  class="btn-select">
+          <option value="Impact">Impact</option>
+          <option value="Arial">Arial</option>
         </select>
-        <div class="btn-stroke controls-btn">
-          <i class="fas fa-bold"></i>
-        </div>
+       
+        <a class="btn-download" id="link" onclick="onDownload()" download="do-u-even-lift">
+        Download
+       </a>
 
-        <button class="btn-download" onclick="onDownload()">Download</button>
-        <a id="link"></a>
-      </section>
+       <label for="checkbox2"  class="btn-save controls-btn">
+        <i class="far fa-save btn-save"></i>
+        <input onchange="onOpenSaveModal();"  class="checkbox2" type="checkbox" id="checkbox2" hidden />
+    </label>
+      
+      </div>
     </section>
+   
+    <div class="save-modal hidden">
+      <div onclick="onCloseSaveModal()">X</div> 
+     <div>Meme Saved.</div> 
+    </div>
 
+  
+    <!-- Author -->
     <section id="about" class="author container">
       <div class="author-img-wrapper">
         <img src="imgs/author.jpeg" alt="" />
@@ -152,6 +206,7 @@
         </div>
       </div>
     </section>
+    <!-- Footer -->
     <footer>
       <div class="footer-container">
         <div class="logo-img-container">

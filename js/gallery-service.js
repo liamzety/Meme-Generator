@@ -34,7 +34,6 @@ function createGalleryImgs() {
 }
 
 // function filterGalleryImgs(keyword) {
-//   console.log('', gImgs);
 //   gImgs.forEach((image, idx) => {
 //     let isExsits = image.keywords.some((tag) => {
 //       return tag !== keyword;

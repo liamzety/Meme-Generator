@@ -7,8 +7,9 @@ let gMeme = {
     {
       txt: 'Puki Mafioso',
       size: 55,
-      align: 'left',
-      color: 'red',
+      color: '#ffff',
+      font: 'Impact',
+      borderColor: 'black',
       y: 0,
       x: 0,
       selected: true,
@@ -27,7 +28,7 @@ function changeMemeTxt(val) {
 function switchLine(isDeleted = false) {
   if (gMeme.selectedLineIdx === 0 || !isDeleted) {
     if (gMeme.selectedLineIdx >= gMeme.lines.length - 1) {
-      //make the loop to select the first txt after reaching the end of txts
+      //makes the loop to select the first txt after reaching the end of txts
       gMeme.selectedLineIdx = 0;
     } else {
       gMeme.selectedLineIdx++;
@@ -35,7 +36,7 @@ function switchLine(isDeleted = false) {
   } else if (gMeme.selectedLineIdx !== 0) {
     gMeme.selectedLineIdx--;
   }
-  console.log('', gMeme.selectedLineIdx);
+
   gMeme.lines.forEach((meme, idx) => {
     if (idx === gMeme.selectedLineIdx) {
       meme.selected = true;
@@ -57,23 +58,24 @@ function resetTxt() {
       {
         txt: 'reset',
         size: 55,
-        align: 'left',
-        color: 'red',
+        color: '#fffff',
+        font: 'Impact',
+        borderColor: 'black',
         y: 0,
         x: 0,
         selected: true,
       },
     ],
   };
-  console.log('', gMeme);
 }
 
 function addLine() {
   gMeme.lines.push({
     txt: 'The struggle is real..',
     size: 55,
-    align: 'left',
-    color: 'red',
+    color: '#ffff',
+    font: 'Impact',
+    borderColor: 'black',
     x: EL_CANVAS.width,
     y: EL_CANVAS.height - EL_CANVAS.height + gTxtFontSize,
     selected: false,
@@ -81,12 +83,19 @@ function addLine() {
 }
 
 function deleteLine() {
-  //if (gMeme.selectedLineIdx === 0) return;
   gMeme.lines = gMeme.lines.filter((meme) => {
     return !meme.selected;
   });
 }
-
+function changeTxtColor(color) {
+  gMeme.lines[gMeme.selectedLineIdx].color = color;
+}
+function changeBorderColor(color) {
+  gMeme.lines[gMeme.selectedLineIdx].borderColor = color;
+}
+function changeFont(selectedFont) {
+  gMeme.lines[gMeme.selectedLineIdx].font = selectedFont;
+}
 function findImg(imgId) {
   let foundImg = gImgs.find((img) => {
     return imgId === img.id;
@@ -96,4 +105,11 @@ function findImg(imgId) {
 }
 function getgMeme() {
   return gMeme;
+}
+
+function saveMeme() {
+  console.log('one');
+  let imgContent = EL_CANVAS.toDataURL('image/png');
+  gSavedImgs.push(imgContent);
+  saveToStorage('memes', gSavedImgs);
 }

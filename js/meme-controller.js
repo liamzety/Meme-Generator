@@ -7,6 +7,9 @@ let gTxtFontSize;
 document.querySelector('.font-sizer').value = 55;
 
 function init() {
+  if (checkIfStorage()) {
+    gSavedImgs = loadFromStorage('memes');
+  }
   renderTags();
   createGalleryImgs();
   renderGallery();
@@ -21,154 +24,171 @@ function init() {
 
 function renderEditor(imgId) {
   updateSelectedMeme(imgId);
-  let currentMeme = getgMeme();
 
-  handleRenders();
-  renderMemeCanvas(imgId, currentMeme);
+  backToEditor();
+  renderMemeCanvas();
 }
 
 function onChangeMemeTxt(elTxtInput) {
-  changeMemeTxt(elTxtInput.value);
-
   let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
-
-  renderMemeCanvas(currentMemeId, meme);
+  if (meme.lines.length === 0) return;
+  changeMemeTxt(elTxtInput.value);
+  renderMemeCanvas();
 }
 function onChangeMemeFont(elFontInput) {
   changeFontSize(elFontInput.value);
-
-  let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
-
-  renderMemeCanvas(currentMemeId, meme);
+  renderMemeCanvas();
 }
 function onSwitchLine() {
   switchLine();
   let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
-
-  //change value of current text input
+  //changes value of current text input
   document.querySelector('.meme-text').value =
     meme.lines[meme.selectedLineIdx].txt;
-  //change value of current font sizer input
+  //changes value of current font sizer input
   document.querySelector('.font-sizer').value =
     meme.lines[meme.selectedLineIdx].size;
 
-  renderMemeCanvas(currentMemeId, meme);
+  renderMemeCanvas();
 }
 function onAddLine() {
   addLine();
   onSwitchLine();
-  let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
 
+  let meme = getgMeme();
   if (meme.lines.length === 2) {
     meme.lines[meme.lines.length - 1].y = EL_CANVAS.height - 10;
   } else if (meme.lines.length > 2) {
     meme.lines[meme.lines.length - 1].y = EL_CANVAS.height / 2;
   }
 
-  renderMemeCanvas(currentMemeId, meme);
+  renderMemeCanvas();
 }
 function onDeleteLine() {
   const isDeleted = true;
   deleteLine();
   switchLine(isDeleted);
   let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
-
-  if (gMeme.selectedLineIdx !== 0) {
-    //change value of current text input
+  if (meme.selectedLineIdx !== 0) {
+    //changes value of current text input
     document.querySelector('.meme-text').value =
       meme.lines[meme.selectedLineIdx].txt;
-    //change value of current font sizer input
+    //changes value of current font sizer input
     document.querySelector('.font-sizer').value =
       meme.lines[meme.selectedLineIdx].size;
   }
-  renderMemeCanvas(currentMemeId, meme);
+  renderMemeCanvas();
 }
 
+function onChangeColor() {
+  let color = document.querySelector('#palette-txt').value;
+
+  changeTxtColor(color);
+
+  renderMemeCanvas();
+}
+function onChangeBorderColor() {
+  let color = document.querySelector('#palette-border').value;
+
+  changeBorderColor(color);
+
+  renderMemeCanvas();
+}
+function onChangeFontFam(selectedFont) {
+  changeFont(selectedFont);
+
+  renderMemeCanvas();
+}
+function onSaveMeme() {
+  saveMeme();
+}
 function onDownload() {
-  let isSaved = true;
+  let elLink = document.getElementById('link');
+  let isDownloaded = true;
+  renderMemeCanvas(isDownloaded);
 
-  let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
-
-  renderMemeCanvas(currentMemeId, meme, isSaved);
-
-  var link = document.getElementById('link');
-  link.setAttribute('download', 'do-u-even-lift.png');
-  link.setAttribute(
-    'href',
-    EL_CANVAS.toDataURL('image/png').replace('image/png', 'image/octet-stream')
-  );
-  link.click();
+  let imgContent = EL_CANVAS.toDataURL('image/png');
+  elLink.href = imgContent;
 }
 
 function onMoveTxt(ev) {
   let meme = getgMeme();
-  let currentMemeId = meme.selectedImgId;
   console.log('', ev);
   switch (ev.key) {
     case 'ArrowRight':
       ev.preventDefault();
-      gMeme.lines[gMeme.selectedLineIdx].x += 10;
-
-      renderMemeCanvas(currentMemeId, meme, false);
+      meme.lines[meme.selectedLineIdx].x += 25;
+      renderMemeCanvas();
       break;
     case 'ArrowLeft':
       ev.preventDefault();
-      gMeme.lines[gMeme.selectedLineIdx].x -= 10;
-
-      renderMemeCanvas(currentMemeId, meme, false);
+      meme.lines[meme.selectedLineIdx].x -= 25;
+      renderMemeCanvas();
       break;
     case 'ArrowUp':
       ev.preventDefault();
-      gMeme.lines[gMeme.selectedLineIdx].y -= 10;
-      renderMemeCanvas(currentMemeId, meme, false);
+      meme.lines[meme.selectedLineIdx].y -= 25;
+      renderMemeCanvas();
       break;
     case 'ArrowDown':
       ev.preventDefault();
-      gMeme.lines[gMeme.selectedLineIdx].y += 10;
-      renderMemeCanvas(currentMemeId, meme, false);
-      break;
-
-    default:
+      meme.lines[meme.selectedLineIdx].y += 25;
+      renderMemeCanvas();
       break;
   }
+  //boolean to check if a click was made on canvas + it was done on desktop and not mobile
+  //(since mobile is not working as intended)
+  if (
+    ev.target.className === 'meme-canvas' &&
+    ev.type === 'mousedown' &&
+    ev.sourceCapabilities.firesTouchEvents !== true
+  ) {
+    meme.lines[meme.selectedLineIdx].x =
+      ev.layerX + ev.pageX - EL_CANVAS.width / 2;
 
-  switch (ev.type) {
-    case 'mousedown':
-      console.log('image-width', EL_CANVAS.width);
-      console.log('image-height', EL_CANVAS.height);
+    meme.lines[meme.selectedLineIdx].y =
+      ev.layerY + ev.target.offsetTop / EL_CANVAS.height;
 
-      gMeme.lines[gMeme.selectedLineIdx].x =
-        ev.layerX + ev.pageX - EL_CANVAS.width / 2;
-      // ev.screenX + ev.target.offsetLeft;
-      console.log('current touched x', gMeme.lines[gMeme.selectedLineIdx].x);
+    renderMemeCanvas();
+  }
 
-      gMeme.lines[gMeme.selectedLineIdx].y =
-        ev.layerY + ev.target.offsetTop - EL_CANVAS.height / 10;
-      // ev.screenY - ev.target.offsetTop;
-      console.log('current touched y', gMeme.lines[gMeme.selectedLineIdx].y);
+  if (ev.type === 'mousedown') {
+    switch (ev.target.className) {
+      case 'controls-arrow-up controls-btn':
+      case 'fas fa-arrow-up':
+        meme.lines[meme.selectedLineIdx].y -= 25;
+        renderMemeCanvas();
 
-      renderMemeCanvas(currentMemeId, meme, false);
-      ev.preventDefault();
-      break;
+        break;
 
-    default:
-      break;
+      case 'controls-arrow-left controls-btn':
+      case 'fas fa-arrow-left':
+        meme.lines[meme.selectedLineIdx].x -= 25;
+        renderMemeCanvas();
+        break;
+
+      case 'controls-arrow-down controls-btn':
+      case 'fas fa-arrow-down':
+        meme.lines[meme.selectedLineIdx].y += 25;
+        renderMemeCanvas();
+        break;
+
+      case 'controls-arrow-right controls-btn':
+      case 'fas fa-arrow-right':
+        meme.lines[meme.selectedLineIdx].x += 25;
+        renderMemeCanvas();
+        break;
+    }
   }
 }
 
-function renderMemeCanvas(imgId = 1, meme, isSaved) {
-  let foundImg = findImg(imgId);
+function renderMemeCanvas(isSaved = false) {
+  let meme = getgMeme();
+  let currentMemeId = meme.selectedImgId;
+
+  let foundImg = findImg(currentMemeId);
   let img = new Image();
   img.src = foundImg.url;
-
-  EL_CANVAS.width = img.width;
-  EL_CANVAS.height = img.height;
 
   CTX.clearRect(0, 0, EL_CANVAS.width, EL_CANVAS.height);
   CTX.drawImage(img, 0, 0);
@@ -176,63 +196,44 @@ function renderMemeCanvas(imgId = 1, meme, isSaved) {
   for (let i = 0; i < meme.lines.length; i++) {
     gTxtFontSize = +meme.lines[i].size;
 
-    CTX.font = gTxtFontSize + 'px Impact , heb ';
-    CTX.fillStyle = '#ffffff';
-    if (meme.lines[i].selected && !isSaved) CTX.strokeStyle = 'red';
-    else CTX.strokeStyle = 'black';
+    CTX.font = `${gTxtFontSize}px ${meme.lines[i].font} , heb `;
+    CTX.fillStyle = meme.lines[i].color;
+
+    CTX.strokeStyle = meme.lines[i].borderColor;
+    if (meme.lines[i].selected && !isSaved) {
+      CTX.font = `italic ${gTxtFontSize}px ${meme.lines[i].font} , heb `;
+    }
+
     CTX.textAlign = 'center';
     CTX.lineWidth = gTxtFontSize / gTxtFontSize + 0.5;
 
     CTX.fillText(
       meme.lines[i].txt,
-      gMeme.lines[i].x / 2,
-      gMeme.lines[i].y,
-      gMeme.lines[i].x
+      meme.lines[i].x / 2,
+      meme.lines[i].y,
+      meme.lines[i].x
     );
     CTX.strokeText(
       meme.lines[i].txt,
-      gMeme.lines[i].x / 2,
-      gMeme.lines[i].y,
-      gMeme.lines[i].x
+      meme.lines[i].x / 2,
+      meme.lines[i].y,
+      meme.lines[i].x
     );
   }
 }
-function handleRenders() {
-  const elMemeContainer = document.querySelector('.meme-container');
-  const elGallery = document.querySelector('.meme-gallery');
-  const elGalleryNav = document.querySelector('.navbar');
-  const elGalleryAuthor = document.querySelector('.author');
-  const elCurrentPageLink = document.querySelector('.filter-links a');
 
-  elCurrentPageLink.classList.remove('active-page');
-  elMemeContainer.classList.remove('hidden');
-  elGallery.classList.add('hidden');
-  elGalleryNav.classList.add('hidden');
-  elGalleryAuthor.classList.add('hidden');
+function onOpenSaveModal() {
+  console.log('modal');
+  onSaveMeme();
+  document.querySelector('.save-modal').classList.remove('hidden');
 }
 
-function backToGallery() {
-  const elMemeContainer = document.querySelector('.meme-container');
-  const elGallery = document.querySelector('.meme-gallery');
-  const elGalleryNav = document.querySelector('.navbar');
-  const elGalleryAuthor = document.querySelector('.author');
-  const elCurrentPageLink = document.querySelector('.filter-links a');
-  const elCurrentPageLinkHam = document.querySelector(
-    '.filter-links-hamburger a'
-  );
-
-  elCurrentPageLink.classList.add('active-page');
-  elCurrentPageLinkHam.classList.add('active-page');
-  elMemeContainer.classList.add('hidden');
-  elGallery.classList.remove('hidden');
-  elGalleryNav.classList.remove('hidden');
-  elGalleryAuthor.classList.remove('hidden');
+function onCloseSaveModal() {
+  document.querySelector('.save-modal').classList.add('hidden');
 }
-
-function backToAbout() {
-  backToGallery();
-}
-function changeHamburgerIcon() {
-  document.querySelector('.hamburger-menu label').classList.toggle('fa-bars');
-  document.querySelector('.hamburger-menu label').classList.toggle('fa-times');
+function closeAllModals(ev) {
+  // closes modals on body click whose target is not the element (currently only 1 boolean cuz only 1 modal.)
+  if (ev.target.className !== 'save-modal') {
+    document.querySelector('.save-modal').classList.add('hidden');
+  }
 }
