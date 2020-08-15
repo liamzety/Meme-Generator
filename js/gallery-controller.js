@@ -112,12 +112,13 @@ function backToMyMemes() {
   gElGalleryBg.classList.add('hidden');
   gElNavBar.classList.add('hidden');
   gElGalleryAuthor.classList.add('hidden');
-
   if (checkIfStorage('memes')) {
+    gElsavedMemesBg.classList.add('min-height-40vh');
     renderSavedMemes();
   } else {
+    gElsavedMemesBg.classList.add('min-height-75vh');
     gElSavedMemesContainer.classList.add('flex-center');
-    gElSavedMemesContainer.classList.add('min-height');
+
     gElSavedMemesContainer.innerHTML = `
   
   <h1 class="no-memes-msg"> You dont have any memes saved. </h1>
@@ -155,7 +156,6 @@ function backToGallery() {
   gElsavedMemesBg.classList.add('hidden');
   gElGalleryLink.classList.add('active-page');
 
-  // gElSavedMemesContainer.classList.remove('min-height');
   gElSavedMemesContainer.classList.remove('saved-memes-grid');
   gElMemeLinkHam.classList.remove('active-page');
   gElMyMemesLink.classList.remove('active-page');
