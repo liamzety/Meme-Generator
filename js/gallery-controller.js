@@ -83,7 +83,6 @@ function onTagClick(elTag, idx) {
   renderTags();
 }
 function renderSavedMemes() {
-  console.log('hi');
   let strHTML = '';
   gElSavedMemesContainer.classList.add('saved-memes-grid');
 

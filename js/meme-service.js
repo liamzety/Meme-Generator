@@ -108,7 +108,6 @@ function getgMeme() {
 }
 
 function saveMeme() {
-  console.log('one');
   let imgContent = EL_CANVAS.toDataURL('image/png');
   gSavedImgs.push(imgContent);
   saveToStorage('memes', gSavedImgs);

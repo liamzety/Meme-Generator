@@ -145,7 +145,7 @@ function onShareImg(elForm, ev) {
 
 function doShareImg(elForm, onSuccess) {
   let formData = new FormData(elForm);
-  fetch('http://ca-upload.com/here/upload.php', {
+  fetch('ca-upload.com/here/upload.php', {
     method: 'POST',
     body: formData,
   })
@@ -160,7 +160,6 @@ function doShareImg(elForm, onSuccess) {
 
 function onMoveTxt(ev) {
   let meme = getgMeme();
-  console.log('', ev);
   switch (ev.key) {
     case 'ArrowRight':
       ev.preventDefault();
@@ -286,7 +285,6 @@ function renderMemeCanvas(isSaved = false) {
 }
 
 function onOpenSaveModal() {
-  console.log('modal');
   onSaveMeme();
   document.querySelector('.save-modal').classList.remove('hidden');
 }
