@@ -64,8 +64,17 @@
     </nav>
     <div class="upload-sector">
       <h3>You can also upload your own meme</h3>
-      <label class="supported-ratio-p" for="upload-img">   Only 500x500 picutres are supported </label>
-      <input style="text-align: center;" onchange="onUploadImg(this)"  accept="image/*" id="upload-img" class="upload-img" type="file">
+      <p class="supported-ratio-p" for="upload-img">   Only 500x500 picutres are supported </p>
+
+      <div class="btn-upload">
+        <label for="upload-img">
+        <i  class="fas fa-upload">
+        </i>
+      </div>
+        <input class="upload-img"  onchange="onUploadImg(this)"  accept="image/*" id="upload-img"  type="file" hidden>
+
+    </label>
+
     </div>
     <!-- Gallery -->
     <div class="gallery-bg">
@@ -143,7 +152,7 @@
           <i class="fas fa-plus"></i>
         </div>
         <div onclick="onDeleteLine()" class="btn-trash controls-btn">
-          <i class="fas fa-trash-alt"></i>
+          <box-icon size='sm' name='trash' animation='burst-hover' ></box-icon>
         </div>
 
         <input
@@ -168,15 +177,22 @@
           <option value="Arial">Arial</option>
         </select>
        
-        <a class="btn-download" id="link" onclick="onDownload()" download="do-u-even-lift">
+        <a class="btn-download" id="link-download" onclick="onDownload()" download="do-u-even-lift">
         Download
        </a>
-
+      
        <label for="checkbox2"  class="btn-save controls-btn">
-        <i class="far fa-save btn-save"></i>
+        <box-icon size='sm' name='save' animation='tada-hover' ></box-icon>
         <input onchange="onOpenSaveModal();"  class="checkbox2" type="checkbox" id="checkbox2" hidden />
     </label>
     
+    <form class="_share-container" action="" method="POST" enctype="multipart/form-data" onsubmit="onShareImg(this, event)">
+          <button class="_share-btn" type="submit">
+            Get Share Link
+          </button>
+      <input name="img" id="imgData" type="hidden" />
+    </form>
+
       </div>
     </section>
    
@@ -223,7 +239,7 @@
 
 
 
-
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/gallery-service.js"></script>

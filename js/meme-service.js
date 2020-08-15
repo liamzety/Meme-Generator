@@ -5,7 +5,7 @@ let gMeme = {
   selectedLineIdx: 0,
   lines: [
     {
-      txt: 'Puki Mafioso',
+      txt: 'Click to move me',
       size: 55,
       color: '#ffff',
       font: 'Impact',

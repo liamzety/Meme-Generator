@@ -19,6 +19,9 @@
 *:focus {
   outline: none;
 }
+*:hover {
+  transition: all 0.3s ease-out;
+}
 
 html {
   font-size: 19px;
@@ -168,7 +171,6 @@ img {
   background-position: right;
   background-position-y: 9px;
   border-bottom: 2px solid #040a2c;
-  transition: 0.3s;
   margin-bottom: 25px;
 }
 @media (max-width: 660px) {
@@ -219,6 +221,15 @@ img {
 .supported-ratio-p {
   font-size: 0.8rem;
 }
+.btn-upload {
+  font-size: 1.2rem;
+  width: initial;
+}
+.btn-upload label:hover {
+  color: #040a2c;
+  cursor: pointer;
+}
+
 /* Gallery */
 .gallery-bg {
   background-color: #e4e4e4;
@@ -271,7 +282,6 @@ img {
 .meme-gallery img:hover {
   cursor: pointer;
   filter: brightness(50%);
-  transition: all 1s ease;
 }
 /* Saved Memes */
 .saved-memes-bg {
@@ -303,16 +313,19 @@ img {
 /* Canvas */
 
 .meme-canvas {
-  width: 500px;
+  max-width: 500px;
+  max-height: 500px;
 }
 @media (max-width: 520px) {
   .meme-canvas {
-    width: 350px;
+    max-width: 350px;
+    max-height: 350px;
   }
 }
 @media (max-width: 320px) {
   .meme-canvas {
-    width: 300px;
+    max-width: 300px;
+    max-height: 300px;
   }
 }
 
@@ -439,10 +452,36 @@ img {
 }
 .meme-editor .btn-download:hover {
   color: #040a2c;
-  transition: all 0.3s ease;
 }
+.meme-editor ._share-container {
+  width: 100%;
+  height: 100%;
+  grid-column: 2 / span 2;
+  grid-row: 9 / span 1;
+}
+.meme-editor ._share-container ._share-btn {
+  font-size: 21px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border-radius: 12px;
+  border: none;
+  background-color: #ff7f00;
+  font-weight: bold;
+}
+.meme-editor ._share-container ._share-btn:hover,
+.meme-editor ._share-container ._share-btn:hover i {
+  color: #fff;
+}
+.meme-editor ._share-container i {
+  font-size: 25px;
+}
+
 .meme-editor .btn-save {
-  grid-column: 3 /4;
+  grid-column: 1 / span 1;
   grid-row: 9 / span 1;
 }
 .save-modal {
@@ -533,7 +572,6 @@ img {
 }
 .footer-icons .icon-wrapper:hover > img {
   filter: invert(0);
-  transition: all 0.5s ease;
 }
 .footer-icons .icon-wrapper:not(:last-child) {
   margin-inline-end: 10px;
@@ -582,11 +620,14 @@ footer {
   justify-content: center;
   align-items: center;
 }
-.controls-btn:hover i {
-  filter: invert(1);
-  transition: all 0.3s ease;
+.controls-btn:hover i,
+.controls-btn:hover box-icon {
+  transition: 0.3s;
+  color: #ffff;
 }
-
+svg {
+  color: #fff;
+}
 .flex-center {
   display: flex;
   justify-content: center;

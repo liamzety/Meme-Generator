@@ -7,14 +7,11 @@ let gTxtFontSize;
 document.querySelector('.font-sizer').value = 55;
 
 function init() {
-  if (checkIfStorage('memes')) {
-    gSavedImgs = loadFromStorage('memes');
-  }
-
+  if (checkIfStorage('memes')) gSavedImgs = loadFromStorage('memes');
   createGalleryImgs();
-
   renderTags();
   renderGallery();
+
   EL_CANVAS = document.querySelector('.meme-canvas');
   CTX = EL_CANVAS.getContext('2d');
 
@@ -60,6 +57,7 @@ function onAddLine() {
   let meme = getgMeme();
   if (meme.lines.length === 2) {
     meme.lines[meme.lines.length - 1].y = EL_CANVAS.height - 10;
+    meme.lines[meme.lines.length - 1].x = EL_CANVAS.width;
   } else if (meme.lines.length > 2) {
     meme.lines[meme.lines.length - 1].y = EL_CANVAS.height / 2;
   }
@@ -105,12 +103,59 @@ function onSaveMeme() {
   saveMeme();
 }
 function onDownload() {
-  let elLink = document.getElementById('link');
+  let elLink = document.getElementById('link-download');
   let isDownloaded = true;
   renderMemeCanvas(isDownloaded);
 
   let imgContent = EL_CANVAS.toDataURL('image/png');
   elLink.href = imgContent;
+}
+
+function onShareImg(elForm, ev) {
+  ev.preventDefault();
+  const elShareContainer = document.querySelector('._share-container');
+  elShareContainer.innerHTML = `
+  <a class="_share-btn">
+  <box-icon name='loader-alt' animation='spin' ></box-icon>
+  </a>
+  <input name="img" id="imgData" type="hidden" />
+  `;
+  setTimeout(() => {
+    document.getElementById('imgData').value = EL_CANVAS.toDataURL(
+      'image/jpeg'
+    );
+
+    function onSuccess(uploadedImgUrl) {
+      uploadedImgUrl = encodeURIComponent(uploadedImgUrl);
+      elShareContainer.innerHTML = `
+          <a class="_share-btn" href="www.facebook.com/sharer/sharer.php?u=${uploadedImgUrl}&t=${uploadedImgUrl}" title="Share on Facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${uploadedImgUrl}&t=${uploadedImgUrl}'); return false;"></a>`;
+      document.querySelector('._share-btn').click();
+      elShareContainer.innerHTML = `
+ 
+      <button class="_share-btn" type="submit">
+        Get Share Link
+      </button>
+    <input name="img" id="imgData" type="hidden" />
+  
+      `;
+    }
+    doShareImg(elForm, onSuccess);
+  }, 800);
+}
+
+function doShareImg(elForm, onSuccess) {
+  let formData = new FormData(elForm);
+  fetch('http://ca-upload.com/here/upload.php', {
+    method: 'POST',
+    body: formData,
+  })
+    .then(function (res) {
+      return res.text();
+    })
+    .then(onSuccess)
+    .catch(function (err) {
+      console.error(err);
+    });
 }
 
 function onMoveTxt(ev) {
@@ -205,7 +250,8 @@ function renderMemeCanvas(isSaved = false) {
   let img = new Image();
   img.src = foundImg.url;
 
-  // img.src = resizeInCanvas(img);
+  EL_CANVAS.width = img.width;
+  EL_CANVAS.height = img.height;
 
   CTX.clearRect(0, 0, EL_CANVAS.width, EL_CANVAS.height);
   CTX.drawImage(img, 0, 0);
