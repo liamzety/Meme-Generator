@@ -42,6 +42,7 @@ function addImage() {
 
   renderGallery();
 }
+// Cant figure this out for now
 // function filterGalleryImgs(keyword) {
 //   gImgs.forEach((image, idx) => {
 //     let isExsits = image.keywords.some((tag) => {

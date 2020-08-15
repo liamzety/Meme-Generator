@@ -145,7 +145,7 @@ function onShareImg(elForm, ev) {
 
 function doShareImg(elForm, onSuccess) {
   let formData = new FormData(elForm);
-  fetch('ca-upload.com/here/upload.php', {
+  fetch('https://ca-upload.com/here/upload.php', {
     method: 'POST',
     body: formData,
   })
