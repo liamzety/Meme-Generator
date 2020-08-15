@@ -15,13 +15,15 @@ const gElMyMemesLink = document.querySelector('.filter-links a:last-of-type');
 const gElSavedMemesContainer = document.querySelector('.saved-memes-container');
 const gElGalleryBg = document.querySelector('.gallery-bg');
 const gElNavBar = document.querySelector('.navbar');
+const elUploadSector = document.querySelector('.upload-sector');
+const gElsavedMemesBg = document.querySelector('.saved-memes-bg');
 
 function renderGallery() {
   const elGallery = document.querySelector('.meme-gallery');
   let strHTML = '';
   for (let i = 0; i < gImgs.length; i++) {
     strHTML += `
-      <img onclick="renderEditor( ${gImgs[i].id})" src="${gImgs[i].url}" />
+      <img onclick="renderEditor(${gImgs[i].id})" src="${gImgs[i].url}" />
       `;
   }
 
@@ -52,8 +54,8 @@ function onShowMore() {
     marginTop += 0.5;
   }
 
-  document.querySelector('.navbar').style.flexWrap = 'wrap';
-  document.querySelector('.gallery-bg').style.marginTop = `${marginTop}rem`;
+  gElGalleryNav.style.flexWrap = 'wrap';
+  elUploadSector.style.marginTop = `${marginTop}rem`;
 
   document.querySelector('.tags').style.overflow = 'initial';
 }
@@ -80,54 +82,70 @@ function onTagClick(elTag, idx) {
 
   renderTags();
 }
+function renderSavedMemes() {
+  console.log('hi');
+  let strHTML = '';
+  gElSavedMemesContainer.classList.add('saved-memes-grid');
+
+  gSavedImgs.forEach((memeImg, idx) => {
+    strHTML += `
+            <a href="${memeImg}" download="do-u-even-lift">
+            <img class="saved-meme-img-${idx}" src="${memeImg}">
+            </a>
+            `;
+  });
+
+  gElSavedMemesContainer.innerHTML = strHTML;
+}
 
 function backToMyMemes() {
-  let elSavedMemesContainer = document.querySelector('.saved-memes-container');
-  let strHTML = '';
-
-  const elGalleryBg = document.querySelector('.gallery-bg');
-  const elNavBar = document.querySelector('.navbar');
-  const elAuthorContainer = document.querySelector('.author');
   backToGallery();
 
+  elUploadSector.style.marginTop = 0;
   gElGalleryLink.classList.remove('active-page');
   gElGalleryLinkHam.classList.remove('active-page');
-  elSavedMemesContainer.classList.remove('hidden');
+  gElSavedMemesContainer.classList.remove('hidden');
+  gElsavedMemesBg.classList.remove('hidden');
 
+  elUploadSector.classList.add('hidden');
   gElMemeLinkHam.classList.add('active-page');
   gElMyMemesLink.classList.add('active-page');
-  elGalleryBg.classList.add('hidden');
-  elNavBar.classList.add('hidden');
-  elAuthorContainer.classList.add('hidden');
+  gElGalleryBg.classList.add('hidden');
+  gElNavBar.classList.add('hidden');
+  gElGalleryAuthor.classList.add('hidden');
 
-  if (checkIfStorage()) {
-    gSavedImgs.forEach((memeImg, idx) => {
-      strHTML += `
-      <a href="${memeImg}" download="do-u-even-lift">
-      <img class="saved-meme-img-${idx}" src="${memeImg}">
-      </a>
-      `;
-    });
-    elSavedMemesContainer.innerHTML = strHTML;
+  if (checkIfStorage('memes')) {
+    renderSavedMemes();
   } else {
-    //TODO: DISPLAY MODAL
-    alert('no saved memes');
+    gElSavedMemesContainer.classList.add('flex-center');
+    gElSavedMemesContainer.classList.add('min-height');
+    gElSavedMemesContainer.innerHTML = `
+  
+  <h1 class="no-memes-msg"> You dont have any memes saved. </h1>
+
+  `;
   }
 }
 
 function backToEditor() {
   document.querySelector('.saved-memes-container').classList.add('hidden');
-  document.querySelector('.gallery-bg').style.marginTop = 0;
+  elUploadSector.style.marginTop = 0;
   document.querySelector('.tags').style.overflow = 'hidden';
   gElGalleryLink.classList.remove('active-page');
   gElMyMemesLink.classList.remove('active-page');
   gElMemeContainer.classList.remove('hidden');
+  gElsavedMemesBg.classList.remove('min-height');
+  gElSavedMemesContainer.classList.remove('flex-center');
+  gElSavedMemesContainer.classList.remove('saved-memes-grid');
+
+  elUploadSector.classList.add('hidden');
   gElGallery.classList.add('hidden');
   gElGalleryNav.classList.add('hidden');
   gElGalleryAuthor.classList.add('hidden');
 }
 
 function backToGallery() {
+  elUploadSector.style.marginTop = 0;
   if (document.querySelector('.checkbox').checked) {
     changeHamburgerIcon();
   }
@@ -135,10 +153,15 @@ function backToGallery() {
   gElGalleryLinkHam.classList.add('active-page');
   gElMemeContainer.classList.add('hidden');
   gElSavedMemesContainer.classList.add('hidden');
+  gElsavedMemesBg.classList.add('hidden');
   gElGalleryLink.classList.add('active-page');
 
+  // gElSavedMemesContainer.classList.remove('min-height');
+  gElSavedMemesContainer.classList.remove('saved-memes-grid');
   gElMemeLinkHam.classList.remove('active-page');
   gElMyMemesLink.classList.remove('active-page');
+
+  elUploadSector.classList.remove('hidden');
   gElNavBar.classList.remove('hidden');
   gElGalleryBg.classList.remove('hidden');
   gElGallery.classList.remove('hidden');
@@ -149,4 +172,13 @@ function backToGallery() {
 function changeHamburgerIcon() {
   document.querySelector('.hamburger-menu label').classList.toggle('fa-bars');
   document.querySelector('.hamburger-menu label').classList.toggle('fa-times');
+}
+
+function onUploadImg(elFileInput) {
+  if (elFileInput.files && elFileInput.files[0]) {
+    var img = new Image(); // $('img')[0]
+    img.src = URL.createObjectURL(elFileInput.files[0]); // set src to blob url
+    img.onload = addImage;
+    renderGallery(false);
+  }
 }

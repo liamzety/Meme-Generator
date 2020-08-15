@@ -26,13 +26,22 @@ let gKeyWords = [
 function createGalleryImgs() {
   gKeyWords.forEach((tag, idx) => {
     gImgs.push({
-      id: idx,
+      id: getRandomArbitrary(0, 1000000),
       url: `./imgs/${idx + 1}.jpg`,
       keywords: tag.tagNames,
     });
   });
 }
 
+function addImage() {
+  gImgs.unshift({
+    id: getRandomArbitrary(0, 1000000),
+    url: this.src,
+    keywords: ['sababa'],
+  });
+
+  renderGallery();
+}
 // function filterGalleryImgs(keyword) {
 //   gImgs.forEach((image, idx) => {
 //     let isExsits = image.keywords.some((tag) => {

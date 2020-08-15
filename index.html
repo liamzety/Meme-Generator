@@ -57,13 +57,16 @@
           type="text"
           placeholder="Enter search keyword"
         />
-
         <div class="tags">
           <!-- TAGS RENDER -->
         </div>
       </div>
     </nav>
-
+    <div class="upload-sector">
+      <h3>You can also upload your own meme</h3>
+      <label class="supported-ratio-p" for="upload-img">   Only 500x500 picutres are supported </label>
+      <input style="text-align: center;" onchange="onUploadImg(this)"  accept="image/*" id="upload-img" class="upload-img" type="file">
+    </div>
     <!-- Gallery -->
     <div class="gallery-bg">
       <section class="meme-gallery grid-container">
@@ -71,9 +74,11 @@
       </section>   
     </div>
     <!-- Saved Memes -->
-    <section class="saved-memes-container hidden" >
+    <div class="saved-memes-bg min-height">
+    <section class="saved-memes-container  hidden" >
       <!-- SAVED MEMES RENDER -->
     </section>
+  </div>
     <!-- Canvas -->
     <section class="meme-container hidden">
       <div class="meme-control">
@@ -171,7 +176,7 @@
         <i class="far fa-save btn-save"></i>
         <input onchange="onOpenSaveModal();"  class="checkbox2" type="checkbox" id="checkbox2" hidden />
     </label>
-      
+    
       </div>
     </section>
    
@@ -215,6 +220,10 @@
         <p>all rights reserved 2020</p>
       </div>
     </footer>
+
+
+
+
     <script src="js/utils.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/gallery-service.js"></script>

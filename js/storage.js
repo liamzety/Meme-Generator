@@ -2,10 +2,10 @@
 
 let gSavedImgs = []; // on page init this variable gets the meme arr
 
-function checkIfStorage() {
-  let memes = loadFromStorage('memes');
+function checkIfStorage(key) {
+  let storageItems = loadFromStorage(key);
 
-  if (memes === null || memes.length === 0) return false;
+  if (storageItems === null || storageItems.length === 0) return false;
   else return true;
 }
 

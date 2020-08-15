@@ -7,11 +7,13 @@ let gTxtFontSize;
 document.querySelector('.font-sizer').value = 55;
 
 function init() {
-  if (checkIfStorage()) {
+  if (checkIfStorage('memes')) {
     gSavedImgs = loadFromStorage('memes');
   }
-  renderTags();
+
   createGalleryImgs();
+
+  renderTags();
   renderGallery();
   EL_CANVAS = document.querySelector('.meme-canvas');
   CTX = EL_CANVAS.getContext('2d');
@@ -182,6 +184,19 @@ function onMoveTxt(ev) {
   }
 }
 
+// function resizeInCanvas(img) {
+//   /////////  3-3 manipulate image
+//   var perferedWidth = 500;
+//   var ratio = perferedWidth / img.width;
+//   var canvas = document.querySelector('.resize-canvas');
+//   canvas.width = img.width * ratio;
+//   canvas.height = img.height * ratio;
+//   var ctx = canvas.getContext('2d');
+//   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+//   //////////4. export as dataUrl
+//   return canvas.toDataURL();
+// }
+
 function renderMemeCanvas(isSaved = false) {
   let meme = getgMeme();
   let currentMemeId = meme.selectedImgId;
@@ -189,6 +204,8 @@ function renderMemeCanvas(isSaved = false) {
   let foundImg = findImg(currentMemeId);
   let img = new Image();
   img.src = foundImg.url;
+
+  // img.src = resizeInCanvas(img);
 
   CTX.clearRect(0, 0, EL_CANVAS.width, EL_CANVAS.height);
   CTX.drawImage(img, 0, 0);
