@@ -268,6 +268,24 @@ function renderMemeCanvas(isSaved = false) {
 
     CTX.textAlign = 'center';
     CTX.lineWidth = gTxtFontSize / gTxtFontSize + 0.5;
+    CTX.shadowColor = 'black';
+    CTX.shadowBlur = 7;
+
+    CTX.fillText(
+      meme.lines[i].txt,
+      meme.lines[i].x / 2,
+      meme.lines[i].y,
+      meme.lines[i].x
+    );
+    CTX.strokeText(
+      meme.lines[i].txt,
+      meme.lines[i].x / 2,
+      meme.lines[i].y,
+      meme.lines[i].x
+    );
+
+    CTX.shadowBlur = 0;
+    CTX.fillStyle = meme.lines[i].color;
 
     CTX.fillText(
       meme.lines[i].txt,

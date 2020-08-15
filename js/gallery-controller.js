@@ -112,11 +112,10 @@ function backToMyMemes() {
   gElGalleryBg.classList.add('hidden');
   gElNavBar.classList.add('hidden');
   gElGalleryAuthor.classList.add('hidden');
+  gElsavedMemesBg.classList.add('min-height-75vh');
   if (checkIfStorage('memes')) {
-    gElsavedMemesBg.classList.add('min-height-40vh');
     renderSavedMemes();
   } else {
-    gElsavedMemesBg.classList.add('min-height-75vh');
     gElSavedMemesContainer.classList.add('flex-center');
 
     gElSavedMemesContainer.innerHTML = `
@@ -134,7 +133,7 @@ function backToEditor() {
   gElGalleryLink.classList.remove('active-page');
   gElMyMemesLink.classList.remove('active-page');
   gElMemeContainer.classList.remove('hidden');
-  gElsavedMemesBg.classList.remove('min-height');
+
   gElSavedMemesContainer.classList.remove('flex-center');
   gElSavedMemesContainer.classList.remove('saved-memes-grid');
 
