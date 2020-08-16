@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>MemeGen</title>
-    <link rel="shortcut icon" type="image/x-icon" href="imgs/logo.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
     <!-- font awesome -->
     <script
       src="https://kit.fontawesome.com/62b99758ab.js"
@@ -19,7 +19,7 @@
     <header>
       <div class="filter">
         <div class="logo-img-container">
-          <img class="logo" src="imgs/logo.png" alt="" />
+          <img class="logo" src="img/logo.png" alt="" />
         </div>
 
         <div class="filter-links">
@@ -43,18 +43,27 @@
               >Gallery</a
             >
             <div class="vl"></div>
-            <a href="#about" onclick="backToAbout()">About</a>
+            <a href="#about" onclick="backToGallery()">About</a>
             <div class="vl"></div>
             <a onclick="backToMyMemes()">My Memes</a>
           </div>
         </div>
       </div>
     </header>
+
+
+<div class="gallery-wrapper">
+
+
+
+
+
+
   <!-- Navbar -->
     <nav>
       <div class="navbar">
         <input
-          onchange="onSearch(this.value)"
+          oninput="onSearch(this.value)"
           type="text"
           placeholder="Enter search keyword"
         />
@@ -83,14 +92,57 @@
         <!-- GALLERY RENDER -->
       </section>   
     </div>
+    <!-- Author -->
+    <section id="about" class="author container">
+      <div class="author-img-wrapper">
+        <img src="img/author.jpeg" alt="" />
+      </div>
+      <div class="author-txt-wrapper">
+        <h2>Liam Zety</h2>
+        <p>
+          Web-developer; Personal trainer and a hard worker, loves a good
+          challange
+        </p>
+        <p>I guess i also love history.</p>
+        <div class="footer-icons">
+          <div class="icon-wrapper">
+            <img src="icon/li-logo.png" alt="" />
+          </div>
+          <div class="icon-wrapper">
+            <img src="icon/github-logo.png" alt="" />
+          </div>
+          <div class="icon-wrapper">
+            <img src="icon/face-logo.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+<div class="saved-memes-wrapper">
+
+
     <!-- Saved Memes -->
-    <div class="saved-memes-bg min-height-40vh hidden">
-    <section class="saved-memes-container  hidden" >
+    <div class="saved-memes-bg min-height-75vh ">
+    <section class="saved-memes-container " >
       <!-- SAVED MEMES RENDER -->
     </section>
   </div>
+
+
+
+
+</div>
+<div class="meme-editor-wrapper">
+
+
+
+
+
     <!-- Canvas -->
-    <section class="meme-container hidden">
+    <section id="meme-container" class="meme-container">
       <div class="meme-control">
         <canvas
           onmousedown="onMoveTxt(event)"
@@ -102,7 +154,7 @@
           Your browser does not support the HTML5 canvas tag.
         </canvas>
       </div>
-
+      <div class="meme-editor-container">
       <div class="meme-editor">
         <p class="instructions">
           Usage: to move the current text Use either the
@@ -189,50 +241,29 @@
     
     <form class="_share-container" action="" method="POST" enctype="multipart/form-data" onsubmit="onShareImg(this, event)">
           <button class="_share-btn" type="submit">
-            Get Share Link
+            <i class="fas fa-share-alt"></i>
           </button>
       <input name="img" id="imgData" type="hidden" />
     </form>
 
       </div>
     </section>
-   
+  </div>
+  
     <div class="save-modal hidden">
       <div onclick="onCloseSaveModal()">X</div> 
      <div>Meme Saved.</div> 
     </div>
 
   
-    <!-- Author -->
-    <section id="about" class="author container">
-      <div class="author-img-wrapper">
-        <img src="imgs/author.jpeg" alt="" />
-      </div>
-      <div class="author-txt-wrapper">
-        <h2>Liam Zety</h2>
-        <p>
-          Web-developer; Personal trainer and a hard worker, loves a good
-          challange
-        </p>
-        <p>I guess i also love history.</p>
-        <div class="footer-icons">
-          <div class="icon-wrapper">
-            <img src="icons/li-logo.png" alt="" />
-          </div>
-          <div class="icon-wrapper">
-            <img src="icons/github-logo.png" alt="" />
-          </div>
-          <div class="icon-wrapper">
-            <img src="icons/face-logo.png" alt="" />
-          </div>
-        </div>
-      </div>
-    </section>
+  </div>
+
+
     <!-- Footer -->
     <footer>
       <div class="footer-container">
         <div class="logo-img-container">
-          <img class="logo" src="imgs/logo.png" alt="" />
+          <img class="logo" src="img/logo.png" alt="" />
         </div>
         <p>all rights reserved 2020</p>
       </div>
@@ -241,6 +272,7 @@
 
 
     <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+    <script src="js/init.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/gallery-service.js"></script>

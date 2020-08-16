@@ -18,34 +18,37 @@ const gElNavBar = document.querySelector('.navbar');
 const elUploadSector = document.querySelector('.upload-sector');
 const gElsavedMemesBg = document.querySelector('.saved-memes-bg');
 
-function renderGallery() {
-  const elGallery = document.querySelector('.meme-gallery');
+function renderGallery(searchedTag = 'all') {
   let strHTML = '';
   for (let i = 0; i < gImgs.length; i++) {
-    strHTML += `
-      <img onclick="renderEditor(${gImgs[i].id})" src="${gImgs[i].url}" />
-      `;
+    for (let j = 0; j < gImgs[i].keywords.length; j++) {
+      if (gImgs[i].keywords[j].includes(searchedTag)) {
+        strHTML += `
+        <a href="#meme-container"> 
+          <img onclick="renderEditor(${gImgs[i].id})" src="${gImgs[i].url}" />
+          </a>
+          `;
+        //break to avoid re rendering the same img who as the some of the words
+        break;
+      }
+    }
   }
 
-  elGallery.innerHTML = strHTML;
+  gElGallery.innerHTML = strHTML;
 }
-
 function renderTags() {
+  const keywords = getKeywords();
+
   const tagContainer = document.querySelector('.tags');
   let strHTML = '';
   strHTML += '<a onclick="onShowMore()" href="#">More...</a>';
-  for (let i = 0; i < gKeyWords.length; i++) {
+  for (let i = 0; i < keywords.length; i++) {
     strHTML += `
-    <a style="font-size: ${
-      gKeyWords[i].numOfSearches
-    }px;" onclick="onTagClick(this,${i})" 
-    href="#">${gKeyWords[i].tagNames[gKeyWords[i].tagNames.length - 1]}
-    </a>
+    <a style="font-size:${keywords[i].numOfSearches}px" onclick="onTagClick(this)">${gKeywords[i].tagName}</a>
     `;
   }
   tagContainer.innerHTML = strHTML;
 }
-
 function onShowMore() {
   let numOfTags = document.querySelectorAll('.tags a');
   let marginTop = 0;
@@ -59,27 +62,13 @@ function onShowMore() {
 
   document.querySelector('.tags').style.overflow = 'initial';
 }
-
-function onSearch(val) {
-  console.log('not implemented');
-  //   gImgs = [];
-  //   createGalleryImgs();
-  //   gKeyWords.forEach((tag) => {
-  //     tag.tagNames.forEach((keyword) => {
-  //       if (val !== keyword) return;
-
-  //       // tag found
-  //       filterGalleryImgs(val);
-  //       renderGallery();
-  //     });
-  //   });
+function onSearch(userKeyword) {
+  renderGallery(userKeyword);
 }
-
-function onTagClick(elTag, idx) {
-  incTagSearch(idx);
+function onTagClick(elTag) {
+  incTagSearch(elTag.innerText);
   onSearch(elTag.innerText);
   elTag.style.fontSize += '50px';
-
   renderTags();
 }
 function renderSavedMemes() {
@@ -96,87 +85,75 @@ function renderSavedMemes() {
 
   gElSavedMemesContainer.innerHTML = strHTML;
 }
-
 function backToMyMemes() {
-  backToGallery();
+  updateCurrPage('saved-memes');
 
-  elUploadSector.style.marginTop = 0;
-  gElGalleryLink.classList.remove('active-page');
-  gElGalleryLinkHam.classList.remove('active-page');
-  gElSavedMemesContainer.classList.remove('hidden');
-  gElsavedMemesBg.classList.remove('hidden');
+  document.querySelector('.saved-memes-wrapper').classList.remove('hidden');
+  document.querySelector('.gallery-wrapper').classList.add('hidden');
+  document.querySelector('.meme-editor-wrapper').classList.add('hidden');
 
-  elUploadSector.classList.add('hidden');
-  gElMemeLinkHam.classList.add('active-page');
-  gElMyMemesLink.classList.add('active-page');
-  gElGalleryBg.classList.add('hidden');
-  gElNavBar.classList.add('hidden');
-  gElGalleryAuthor.classList.add('hidden');
-  gElsavedMemesBg.classList.add('min-height-75vh');
   if (checkIfStorage('memes')) {
     renderSavedMemes();
   } else {
     gElSavedMemesContainer.classList.add('flex-center');
-
     gElSavedMemesContainer.innerHTML = `
-  
-  <h1 class="no-memes-msg"> You dont have any memes saved. </h1>
-
+    <h1 class="no-memes-msg"> You dont have any memes saved. </h1>
   `;
   }
 }
-
 function backToEditor() {
-  document.querySelector('.saved-memes-container').classList.add('hidden');
   elUploadSector.style.marginTop = 0;
   document.querySelector('.tags').style.overflow = 'hidden';
-  gElGalleryLink.classList.remove('active-page');
-  gElMyMemesLink.classList.remove('active-page');
-  gElMemeContainer.classList.remove('hidden');
+  updateCurrPage('meme-editor');
 
-  gElSavedMemesContainer.classList.remove('flex-center');
-  gElSavedMemesContainer.classList.remove('saved-memes-grid');
-
-  elUploadSector.classList.add('hidden');
-  gElGallery.classList.add('hidden');
-  gElGalleryNav.classList.add('hidden');
-  gElGalleryAuthor.classList.add('hidden');
+  document.querySelector('.meme-editor-wrapper').classList.remove('hidden');
+  document.querySelector('.gallery-wrapper').classList.add('hidden');
+  document.querySelector('.saved-memes-wrapper').classList.add('hidden');
 }
-
 function backToGallery() {
   elUploadSector.style.marginTop = 0;
   if (document.querySelector('.checkbox').checked) {
     changeHamburgerIcon();
   }
+  updateCurrPage('gallery');
+
   document.querySelector('.checkbox').checked = false;
-  gElGalleryLinkHam.classList.add('active-page');
-  gElMemeContainer.classList.add('hidden');
-  gElSavedMemesContainer.classList.add('hidden');
-  gElsavedMemesBg.classList.add('hidden');
-  gElGalleryLink.classList.add('active-page');
 
-  gElSavedMemesContainer.classList.remove('saved-memes-grid');
-  gElMemeLinkHam.classList.remove('active-page');
-  gElMyMemesLink.classList.remove('active-page');
-
-  elUploadSector.classList.remove('hidden');
-  gElNavBar.classList.remove('hidden');
-  gElGalleryBg.classList.remove('hidden');
-  gElGallery.classList.remove('hidden');
-  gElGalleryNav.classList.remove('hidden');
-  gElGalleryAuthor.classList.remove('hidden');
+  document.querySelector('.gallery-wrapper').classList.remove('hidden');
+  document.querySelector('.meme-editor-wrapper').classList.add('hidden');
+  document.querySelector('.saved-memes-wrapper').classList.add('hidden');
 }
+function onUploadImg(elFileInput) {
+  if (elFileInput.files && elFileInput.files[0]) {
+    var img = new Image();
+    img.src = URL.createObjectURL(elFileInput.files[0]);
+    img.onload = addImage;
+  }
+}
+function updateCurrPage(page) {
+  switch (page) {
+    case 'saved-memes':
+      gElGalleryLinkHam.classList.remove('active-page');
+      gElGalleryLink.classList.remove('active-page');
+      gElMyMemesLink.classList.add('active-page');
+      gElMemeLinkHam.classList.add('active-page');
+      break;
+    case 'meme-editor':
+      gElMemeLinkHam.classList.remove('active-page');
+      gElMyMemesLink.classList.remove('active-page');
+      gElGalleryLink.classList.remove('active-page');
+      gElGalleryLinkHam.classList.remove('active-page');
+      break;
+    case 'gallery':
+      gElMemeLinkHam.classList.remove('active-page');
+      gElMyMemesLink.classList.remove('active-page');
 
+      gElGalleryLinkHam.classList.add('active-page');
+      gElGalleryLink.classList.add('active-page');
+      break;
+  }
+}
 function changeHamburgerIcon() {
   document.querySelector('.hamburger-menu label').classList.toggle('fa-bars');
   document.querySelector('.hamburger-menu label').classList.toggle('fa-times');
-}
-
-function onUploadImg(elFileInput) {
-  if (elFileInput.files && elFileInput.files[0]) {
-    var img = new Image(); // $('img')[0]
-    img.src = URL.createObjectURL(elFileInput.files[0]); // set src to blob url
-    img.onload = addImage;
-    renderGallery(false);
-  }
 }

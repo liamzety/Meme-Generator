@@ -2,33 +2,42 @@
 
 let gImgs = [];
 
-let gKeyWords = [
-  { tagNames: ['all', 'happy'], numOfSearches: 15 },
-  { tagNames: ['all', 'funny', 'puk'], numOfSearches: 15 },
-  { tagNames: ['all', 'מצחיק'], numOfSearches: 15 },
-  { tagNames: ['all', 'boring'], numOfSearches: 15 },
-  { tagNames: ['all', 'עוד תינוק'], numOfSearches: 15 },
-  { tagNames: ['all', 'baby'], numOfSearches: 15 },
-  { tagNames: ['all', 'cocumber'], numOfSearches: 15 },
-  { tagNames: ['all', 'baby'], numOfSearches: 15 },
-  { tagNames: ['all', 'לא מצחיק'], numOfSearches: 15 },
-  { tagNames: ['all', 'wow'], numOfSearches: 15 },
-  { tagNames: ['all', 'food'], numOfSearches: 15 },
-  { tagNames: ['all', 'baby'], numOfSearches: 15 },
-  { tagNames: ['all', 'cows'], numOfSearches: 15 },
-  { tagNames: ['all', 'jokes'], numOfSearches: 15 },
-  { tagNames: ['all', 'baby'], numOfSearches: 15 },
-  { tagNames: ['all', 'games'], numOfSearches: 15 },
-  { tagNames: ['all', 'alpha'], numOfSearches: 15 },
-  { tagNames: ['all', 'תינוק'], numOfSearches: 15 },
+let gKeywords = [
+  { tagName: 'all' },
+  { tagName: 'politics', numOfSearches: 15 },
+  { tagName: 'animals', numOfSearches: 15 },
+  { tagName: 'funny', numOfSearches: 15 },
+  { tagName: 'baby', numOfSearches: 15 },
+  { tagName: 'movies', numOfSearches: 15 },
+  { tagName: 'crazy', numOfSearches: 15 },
+  { tagName: 'cartoon', numOfSearches: 15 },
+  { tagName: 'party', numOfSearches: 15 },
+];
+
+let gTags = [
+  'politics',
+  'baby',
+  'animals',
+  'funny',
+  'baby',
+  'politics',
+  'funny',
+  'party',
+  'movies',
+  'movies',
+  'movies',
+  'politics',
+  'cartoon',
+  'funny',
+  'crazy',
 ];
 
 function createGalleryImgs() {
-  gKeyWords.forEach((tag, idx) => {
+  gTags.forEach((tag, idx) => {
     gImgs.push({
       id: getRandomArbitrary(0, 1000000),
-      url: `./imgs/${idx + 1}.jpg`,
-      keywords: tag.tagNames,
+      url: `./img/${idx + 1}.jpg`,
+      keywords: ['all', tag],
     });
   });
 }
@@ -37,23 +46,22 @@ function addImage() {
   gImgs.unshift({
     id: getRandomArbitrary(0, 1000000),
     url: this.src,
-    keywords: ['sababa'],
+    keywords: ['all', 'custom'],
   });
 
   renderGallery();
 }
-// Cant figure this out for now
-// function filterGalleryImgs(keyword) {
-//   gImgs.forEach((image, idx) => {
-//     let isExsits = image.keywords.some((tag) => {
-//       return tag !== keyword;
-//     });
-//     if (!isExsits) {
-//       gImgs = [gImgs[idx]];
-//     }
-//   });
-// }
 
-function incTagSearch(idx) {
-  gKeyWords[idx].numOfSearches++;
+function getKeywords() {
+  return gKeywords;
+}
+
+function incTagSearch(tagName) {
+  if (tagName === 'all') return;
+  for (let i = 0; i < gKeywords.length; i++) {
+    if (gKeywords[i].tagName === tagName) {
+      gKeywords[i].numOfSearches++;
+    }
+  }
+  saveToStorage('keywords', gKeywords);
 }

@@ -6,28 +6,12 @@ let gTxtPosY;
 let gTxtFontSize;
 document.querySelector('.font-sizer').value = 55;
 
-function init() {
-  if (checkIfStorage('memes')) gSavedImgs = loadFromStorage('memes');
-  createGalleryImgs();
-  renderTags();
-  renderGallery();
-
-  EL_CANVAS = document.querySelector('.meme-canvas');
-  CTX = EL_CANVAS.getContext('2d');
-
-  gTxtFontSize = gMeme.lines[0].size;
-  gMeme.lines[gMeme.selectedLineIdx].x = EL_CANVAS.width;
-  gMeme.lines[gMeme.selectedLineIdx].y =
-    EL_CANVAS.height - EL_CANVAS.height + gTxtFontSize;
-}
-
 function renderEditor(imgId) {
   updateSelectedMeme(imgId);
 
   backToEditor();
   renderMemeCanvas();
 }
-
 function onChangeMemeTxt(elTxtInput) {
   let meme = getgMeme();
   if (meme.lines.length === 0) return;
@@ -79,7 +63,6 @@ function onDeleteLine() {
   }
   renderMemeCanvas();
 }
-
 function onChangeColor() {
   let color = document.querySelector('#palette-txt').value;
 
@@ -110,7 +93,6 @@ function onDownload() {
   let imgContent = EL_CANVAS.toDataURL('image/png');
   elLink.href = imgContent;
 }
-
 function onShareImg(elForm, ev) {
   ev.preventDefault();
   const elShareContainer = document.querySelector('._share-container');
@@ -133,7 +115,7 @@ function onShareImg(elForm, ev) {
       elShareContainer.innerHTML = `
  
       <button class="_share-btn" type="submit">
-        Get Share Link
+      <i class="fas fa-share-alt"></i>
       </button>
     <input name="img" id="imgData" type="hidden" />
   
@@ -142,7 +124,6 @@ function onShareImg(elForm, ev) {
     doShareImg(elForm, onSuccess);
   }, 800);
 }
-
 function doShareImg(elForm, onSuccess) {
   let formData = new FormData(elForm);
   fetch('https://ca-upload.com/here/upload.php', {
@@ -157,26 +138,30 @@ function doShareImg(elForm, onSuccess) {
       console.error(err);
     });
 }
-
 function onMoveTxt(ev) {
   let meme = getgMeme();
+  console.log('', ev);
   switch (ev.key) {
     case 'ArrowRight':
+    case 'd' && !'input':
       ev.preventDefault();
       meme.lines[meme.selectedLineIdx].x += 25;
       renderMemeCanvas();
       break;
     case 'ArrowLeft':
+    case 'a' && !'input':
       ev.preventDefault();
       meme.lines[meme.selectedLineIdx].x -= 25;
       renderMemeCanvas();
       break;
     case 'ArrowUp':
+    case 'w' && !'input':
       ev.preventDefault();
       meme.lines[meme.selectedLineIdx].y -= 25;
       renderMemeCanvas();
       break;
     case 'ArrowDown':
+    case 's' && !'input':
       ev.preventDefault();
       meme.lines[meme.selectedLineIdx].y += 25;
       renderMemeCanvas();
@@ -227,20 +212,6 @@ function onMoveTxt(ev) {
     }
   }
 }
-
-// function resizeInCanvas(img) {
-//   /////////  3-3 manipulate image
-//   var perferedWidth = 500;
-//   var ratio = perferedWidth / img.width;
-//   var canvas = document.querySelector('.resize-canvas');
-//   canvas.width = img.width * ratio;
-//   canvas.height = img.height * ratio;
-//   var ctx = canvas.getContext('2d');
-//   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-//   //////////4. export as dataUrl
-//   return canvas.toDataURL();
-// }
-
 function renderMemeCanvas(isSaved = false) {
   let meme = getgMeme();
   let currentMemeId = meme.selectedImgId;
@@ -301,12 +272,10 @@ function renderMemeCanvas(isSaved = false) {
     );
   }
 }
-
 function onOpenSaveModal() {
   onSaveMeme();
   document.querySelector('.save-modal').classList.remove('hidden');
 }
-
 function onCloseSaveModal() {
   document.querySelector('.save-modal').classList.add('hidden');
 }

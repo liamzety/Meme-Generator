@@ -49,25 +49,6 @@ function switchLine(isDeleted = false) {
 function changeFontSize(fontSize) {
   gMeme.lines[gMeme.selectedLineIdx].size = fontSize;
 }
-// TODO: figure this shit out
-function resetTxt() {
-  gMeme = {
-    selectedImgId: gMeme.selectedImgId,
-    selectedLineIdx: 0,
-    lines: [
-      {
-        txt: 'reset',
-        size: 55,
-        color: '#fffff',
-        font: 'Impact',
-        borderColor: 'black',
-        y: 0,
-        x: 0,
-        selected: true,
-      },
-    ],
-  };
-}
 
 function addLine() {
   gMeme.lines.push({
