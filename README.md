@@ -3,6 +3,8 @@
 Multi-functions meme generator, NOT designed for mobile but responsive in nature.
 @Coding-academy.
 
+**Check it out LIVE here <a href="https://liamzety.github.io/Meme-Generator/">Meme-Generator</a>**
+
 # Main
 > The main screen where you can: 
 - navigate to the other pages 
